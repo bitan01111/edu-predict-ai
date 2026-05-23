@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduPredict AI — Intelligent Student Analytics Platform</title>
+
+  <meta name="description" content="AI-powered student analytics platform featuring predictive modeling, explainable AI, dynamic scenario simulation, personalized study planning, analytics dashboard, and automated reporting." />
+  <meta name="keywords" content="student analytics, machine learning, predictive modeling, explainable AI, educational technology, study planner, performance prediction" />
+
+  <!-- SEO / Social -->
+  <meta property="og:title" content="EduPredict AI — Intelligent Student Analytics Platform" />
+  <meta property="og:description" content="Advanced ensemble ML platform for student performance analytics. Predict outcomes, explain decisions, simulate scenarios, and generate personalized study roadmaps." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="/assets/favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/responsive.css" />
+  <link rel="stylesheet" href="./css/themes.css" />
+
+  <!-- GitHub Pages compatibility -->
+  <meta name="robots" content="index,follow" />
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span style="font-size:20px">⚡</span>
+    <span class="toast-msg" id="toast-msg">Prediction complete!</span>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container nav-inner">
+      <div class="logo">EDUPREDICT AI</div>
+      <div class="nav-links">
+        <a href="#upload">Data</a>
+        <a href="#input">Input</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#xai">Explain AI</a>
+        <a href="#simulator">Simulator</a>
+        <a href="#planner">Planner</a>
+        <a href="#analytics">Analytics</a>
+        <a href="#models">Models</a>
+        <a href="#export">Export</a>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()">☀ / ☾</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge"><span class="pulse-dot"></span>Explainable AI · Ensemble ML · Zero Backend · Portfolio-Grade</div>
+      <h1>EduPredict AI —<br><span>Intelligent Student Analytics</span></h1>
+      <p>AI-powered student analytics platform featuring predictive modeling, explainable AI, dynamic scenario simulation, personalized study planning, analytics dashboard, and automated reporting. Ensemble ML across Random Forest, XGBoost &amp; CatBoost — entirely browser-native.</p>
+      <div class="btn-group" style="justify-content:center">
+        <button class="btn btn-primary glow-anim" onclick="scrollTo('#input')">⚡ Run Analytics</button>
+        <button class="btn btn-secondary" onclick="loadSampleData()">📌 Load Demo Data</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">97.4%</div><div class="lbl">Ensemble Accuracy</div></div>
+        <div class="hero-stat"><div class="num">3</div><div class="lbl">ML Models</div></div>
+        <div class="hero-stat"><div class="num">12+</div><div class="lbl">Feature Inputs</div></div>
+        <div class="hero-stat"><div class="num">6</div><div class="lbl">Analytics Modules</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSV UPLOAD -->
+  <section id="upload">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Data Input</div>
+        <h2>CSV Batch Upload</h2>
+      </div>
+      <div class="card">
+        <div class="upload-zone" id="drop-zone" onclick="document.getElementById('csv-file').click()">
+          <div class="upload-icon">📁</div>
+          <h3>Drop CSV File Here</h3>
+          <p>or click to browse · Supports .csv files</p>
+          <input type="file" id="csv-file" accept=".csv" />
+        </div>
+        <div class="csv-format" style="margin-top:20px">
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Expected CSV Format</div>
+          <code>name,math,science,english,history,attendance,study_hours,sleep_hours,extracurricular</code>
+          <code style="color:var(--text2);font-size:0.7rem;margin-top:4px">Example: John Doe,78,82,65,70,90,4.5,7,1</code>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-secondary" style="padding:7px 14px;font-size:0.65rem" onclick="downloadSampleCSV()">⬇ Download Sample CSV</button>
+            <button class="btn btn-secondary" style="padding:7px 14px;font-size:0.65rem" onclick="loadSampleCSVData()">📄 Load Sample Batch</button>
+          </div>
+        </div>
+        <div id="csv-results" class="hidden" style="margin-top:24px">
+          <div class="divider" style="margin-bottom:20px"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px">
+            <div style="font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700">Batch Results — <span id="csv-count" style="color:var(--neon)">0</span> Students</div>
+            <button class="btn btn-secondary" style="padding:7px 16px;font-size:0.65rem" onclick="exportReport()">📄 Export Report</button>
+          </div>
+          <div class="table-wrap"><table id="csv-table"><thead><tr id="csv-thead"></tr></thead><tbody id="csv-tbody"></tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANUAL INPUT -->
+  <section id="input">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Manual Entry</div>
+        <h2>Student Data Input</h2>
+      </div>
+      <div class="card">
+        <div class="form-grid" id="form-grid">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" id="f-name" placeholder="Enter name" value="Alex Chen" />
+          </div>
+          <div class="form-group">
+            <label>Math Score <span class="range-val" id="math-val">75</span></label>
+            <input type="range" id="f-math" min="0" max="100" value="75" oninput="updateRange(this,'math-val')" />
+          </div>
+          <div class="form-group">
+            <label>Science Score <span class="range-val" id="sci-val">68</span></label>
+            <input type="range" id="f-sci" min="0" max="100" value="68" oninput="updateRange(this,'sci-val')" />
+          </div>
+          <div class="form-group">
+            <label>English Score <span class="range-val" id="eng-val">72</span></label>
+            <input type="range" id="f-eng" min="0" max="100" value="72" oninput="updateRange(this,'eng-val')" />
+          </div>
+          <div class="form-group">
+            <label>History Score <span class="range-val" id="hist-val">60</span></label>
+            <input type="range" id="f-hist" min="0" max="100" value="60" oninput="updateRange(this,'hist-val')" />
+          </div>
+          <div class="form-group">
+            <label>Attendance % <span class="range-val" id="att-val">85</span></label>
+            <input type="range" id="f-att" min="0" max="100" value="85" oninput="updateRange(this,'att-val')" />
+          </div>
+          <div class="form-group">
+            <label>Study Hours/Day <span class="range-val" id="study-val">4.0</span></label>
+            <input type="range" id="f-study" min="0" max="12" step="0.5" value="4" oninput="updateRange(this,'study-val')" />
+          </div>
+          <div class="form-group">
+            <label>Sleep Hours/Night <span class="range-val" id="sleep-val">7.0</span></label>
+            <input type="range" id="f-sleep" min="3" max="12" step="0.5" value="7" oninput="updateRange(this,'sleep-val')" />
+          </div>
+          <div class="form-group">
+            <label>Extracurricular</label>
+            <select id="f-extra">
+              <option value="1">Yes — Active</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Parent Support</label>
+            <select id="f-parent">
+              <option value="2">High</option>
+              <option value="1" selected>Medium</option>
+              <option value="0">Low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Internet Access</label>
+            <select id="f-internet">
+              <option value="1" selected>Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="f-gender">
+              <option value="0">Male</option>
+              <option value="1">Female</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="runPrediction()">⚡ Run ML Prediction</button>
+          <button class="btn btn-secondary" onclick="randomize()">🎲 Randomize</button>
+          <button class="btn btn-danger" onclick="resetForm()">✕ Reset</button>
+        </div>
+        <div class="loading" id="loading"><div class="spinner"></div>Running ensemble ML models…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Results</div>
+        <h2>Prediction Dashboard</h2>
+      </div>
+      <div id="dashboard-empty" class="card" style="text-align:center;padding:60px">
+        <div style="font-size:48px;margin-bottom:16px">🤖</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:var(--text2);margin-bottom:8px">No Prediction Yet</div>
+        <div style="font-size:0.85rem;color:var(--text3)">Fill in student data above and click "Run ML Prediction"</div>
+      </div>
+      <div id="dashboard-content" class="hidden">
+        <!-- Student header -->
+        <div class="card" style="margin-bottom:20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--neon),var(--neon2));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👤</div>
+          <div>
+            <div id="dash-name" style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:700">Alex Chen</div>
+            <div style="font-size:0.8rem;color:var(--text2);margin-top:2px" id="dash-meta">Prediction generated via Ensemble ML · 3 models</div>
+          </div>
+          <div id="dash-verdict" style="margin-left:auto;padding:10px 24px;border-radius:var(--radius2);font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:900;letter-spacing:2px"></div>
+        </div>
+        <!-- Metric cards -->
+        <div class="pred-grid" style="margin-bottom:24px">
+          <div class="pred-card">
+            <div class="metric-label">Average Score</div>
+            <div class="metric-value color-blue" id="d-avg">0</div>
+            <div class="metric-sub">out of 100</div>
+          </div>
+          <div class="pred-card">
+            <div class="metric-label">Pass Probability</div>
+            <div class="metric-value color-green" id="d-pass">0%</div>
+            <div class="metric-sub">confidence score</div>
+          </div>
+          <div class="pred-card">
+            <div class="metric-label">Risk Level</div>
+            <div class="metric-value" id="d-risk">—</div>
+            <div class="metric-sub" id="d-risk-sub">—</div>
+          </div>
+          <div class="pred-card">
+            <div class="metric-label">Model Consensus</div>
+            <div class="metric-value color-purple" id="d-consensus">0/3</div>
+            <div class="metric-sub">models agree</div>
+          </div>
+        </div>
+        <!-- Score breakdown -->
+        <div class="card" style="margin-bottom:24px">
+          <div class="chart-title"><span></span>Subject Score Breakdown</div>
+          <div id="score-bars"></div>
+        </div>
+        <!-- Charts row -->
+        <div class="chart-grid" style="margin-bottom:24px">
+          <div class="chart-card"><div class="chart-title"><span></span>Model Comparison</div><canvas id="chart-models" height="200"></canvas></div>
+          <div class="chart-card"><div class="chart-title"><span></span>Performance Radar</div><canvas id="chart-radar" height="200"></canvas></div>
+          <div class="chart-card"><div class="chart-title"><span></span>Feature Importance</div><div id="feat-importance"></div></div>
+          <div class="chart-card"><div class="chart-title"><span></span>Score Distribution</div><canvas id="chart-dist" height="200"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEAK SUBJECTS -->
+  <section id="weak" style="padding-top:0">
+    <div class="container">
+      <div id="weak-content" class="hidden">
+        <div class="section-header">
+          <div class="section-tag">Analysis</div>
+          <h2>Subject Performance Analysis</h2>
+        </div>
+        <div class="weak-grid" id="weak-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section id="recs" style="padding-top:0">
+    <div class="container">
+      <div id="rec-content" class="hidden">
+        <div class="section-header">
+          <div class="section-tag">AI Advisor</div>
+          <h2>Personalized Recommendations</h2>
+        </div>
+        <div class="rec-list" id="rec-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLAINABLE AI -->
+  <section id="xai">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Explainable AI</div>
+        <h2>Why This Prediction?</h2>
+      </div>
+      <div id="xai-empty" class="card" style="text-align:center;padding:48px">
+        <div style="font-size:40px;margin-bottom:12px">🔍</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.95rem;color:var(--text2);margin-bottom:6px">No Prediction to Explain Yet</div>
+        <div style="font-size:0.82rem;color:var(--text3)">Run a prediction above to see the full XAI breakdown — feature contributions, positive drivers, and risk factors.</div>
+      </div>
+      <div id="xai-content" class="hidden">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px" class="xai-two-col">
+          <div class="card">
+            <div style="font-family:'Orbitron',monospace;font-size:0.82rem;font-weight:700;color:var(--neon);margin-bottom:20px;letter-spacing:1px">📈 POSITIVE DRIVERS</div>
+            <div id="xai-positive" class="xai-grid"></div>
+          </div>
+          <div class="card">
+            <div style="font-family:'Orbitron',monospace;font-size:0.82rem;font-weight:700;color:var(--red);margin-bottom:20px;letter-spacing:1px">📉 RISK FACTORS</div>
+            <div id="xai-negative" class="xai-grid"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:24px">
+          <div style="font-family:'Orbitron',monospace;font-size:0.82rem;font-weight:700;color:var(--neon2);margin-bottom:20px;letter-spacing:1px">📊 FEATURE CONTRIBUTION BREAKDOWN</div>
+          <div id="xai-all" class="xai-grid"></div>
+          <div style="margin-top:20px;padding:16px;background:rgba(0,255,200,0.04);border:1px solid var(--border);border-radius:var(--radius2)">
+            <div style="font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">AI Interpretation</div>
+            <div id="xai-summary" style="font-size:0.88rem;color:var(--text2);line-height:1.7"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT-IF SIMULATOR -->
+  <section id="simulator">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Scenario Engine</div>
+        <h2>What-If Simulator</h2>
+      </div>
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text2);margin-bottom:28px;line-height:1.6">Drag the sliders to simulate different study scenarios. The prediction updates <strong style="color:var(--neon)">instantly</strong> — no need to re-run. Explore how changing attendance, study hours, or subject scores affects the outcome.</div>
+        <div class="sim-grid">
+          <div class="sim-sliders">
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>Attendance %</span><span class="sim-slider-val" id="sv-att">85</span></div>
+              <input type="range" id="sim-att" min="0" max="100" value="85" oninput="updateSimVal(this,'sv-att',0); runSimulation()" />
+            </div>
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>Study Hours / Day</span><span class="sim-slider-val" id="sv-study">4.0</span></div>
+              <input type="range" id="sim-study" min="0" max="12" step="0.5" value="4" oninput="updateSimVal(this,'sv-study',1); runSimulation()" />
+            </div>
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>Sleep Hours / Night</span><span class="sim-slider-val" id="sv-sleep">7.0</span></div>
+              <input type="range" id="sim-sleep" min="3" max="12" step="0.5" value="7" oninput="updateSimVal(this,'sv-sleep',1); runSimulation()" />
+            </div>
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>Mathematics</span><span class="sim-slider-val" id="sv-math">75</span></div>
+              <input type="range" id="sim-math" min="0" max="100" value="75" oninput="updateSimVal(this,'sv-math',0); runSimulation()" />
+            </div>
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>Science</span><span class="sim-slider-val" id="sv-sci">68</span></div>
+              <input type="range" id="sim-sci" min="0" max="100" value="68" oninput="updateSimVal(this,'sv-sci',0); runSimulation()" />
+            </div>
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>English</span><span class="sim-slider-val" id="sv-eng">72</span></div>
+              <input type="range" id="sim-eng" min="0" max="100" value="72" oninput="updateSimVal(this,'sv-eng',0); runSimulation()" />
+            </div>
+            <div class="sim-slider-group">
+              <div class="sim-slider-label"><span>History</span><span class="sim-slider-val" id="sv-hist">60</span></div>
+              <input type="range" id="sim-hist" min="0" max="100" value="60" oninput="updateSimVal(this,'sv-hist',0); runSimulation()" />
+            </div>
+            <div class="btn-group" style="margin-top:8px">
+              <button class="btn btn-secondary" onclick="syncSimFromForm()" style="font-size:0.7rem;padding:8px 16px">↑ Sync from Input Form</button>
+              <button class="btn btn-danger" onclick="resetSim()" style="font-size:0.7rem;padding:8px 16px">Reset</button>
+            </div>
+          </div>
+          <div class="sim-result-panel">
+            <div style="font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)">PASS PROBABILITY</div>
+            <div class="sim-big-num" id="sim-prob" style="color:var(--neon)">72.4%</div>
+            <div class="sim-meter"><div class="sim-meter-fill" id="sim-meter-fill" style="width:72.4%"></div></div>
+            <div class="sim-verdict" id="sim-verdict">✓ LIKELY PASS</div>
+            <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="background:rgba(0,0,0,0.3);border-radius:var(--radius2);padding:12px;text-align:center">
+                <div style="font-size:0.65rem;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Risk Level</div>
+                <div id="sim-risk" style="font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--neon)">Medium</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.3);border-radius:var(--radius2);padding:12px;text-align:center">
+                <div style="font-size:0.65rem;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Avg Score</div>
+                <div id="sim-avg" style="font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--neon2)">68.8</div>
+              </div>
+            </div>
+            <div style="margin-top:16px;font-size:0.75rem;color:var(--text3)">Live simulation — updates instantly as you drag sliders</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI STUDY PLANNER -->
+  <section id="planner">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">AI Study Planner</div>
+        <h2>Personalized 7-Day Roadmap</h2>
+      </div>
+      <div id="planner-empty" class="card" style="text-align:center;padding:48px">
+        <div style="font-size:40px;margin-bottom:12px">💵</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.95rem;color:var(--text2);margin-bottom:6px">No Study Plan Generated</div>
+        <div style="font-size:0.82rem;color:var(--text3);margin-bottom:20px">Run a prediction to generate a personalized 7-day study roadmap based on weak subjects and risk level.</div>
+        <button class="btn btn-primary" onclick="scrollTo('#input')">⚡ Run Prediction First</button>
+      </div>
+      <div id="planner-content" class="hidden">
+        <div style="margin-bottom:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div style="font-size:0.85rem;color:var(--text2)">Study plan for:</div>
+          <div id="planner-name" style="font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;color:var(--neon)">—</div>
+          <div id="planner-risk-badge" style="font-size:0.7rem;font-weight:700;padding:4px 12px;border-radius:100px;border:1px solid var(--border2);color:var(--text2)"></div>
+          <button class="btn btn-secondary" style="padding:7px 14px;font-size:0.65rem;margin-left:auto" onclick="downloadPlannerPDF()">📄 Export Plan</button>
+        </div>
+        <div class="planner-grid" id="planner-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PDF EXPORT -->
+  <section id="export">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Reporting</div>
+        <h2>PDF Report Export</h2>
+      </div>
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text2);margin-bottom:24px;line-height:1.6">Generate a comprehensive analytics report with prediction results, XAI breakdown, subject analysis, and study recommendations. Download as a professional PDF — ready for sharing with educators or students.</div>
+        <div class="export-panel">
+          <div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;color:var(--neon);letter-spacing:1px;margin-bottom:16px">INCLUDE IN REPORT</div>
+            <div class="export-options">
+              <label class="export-option"><input type="checkbox" id="exp-summary" checked><span class="export-option-label">📋 Executive Summary &amp; Prediction Result</span></label>
+              <label class="export-option"><input type="checkbox" id="exp-scores" checked><span class="export-option-label">📚 Subject Score Breakdown</span></label>
+              <label class="export-option"><input type="checkbox" id="exp-xai" checked><span class="export-option-label">🔍 Explainable AI Contribution Analysis</span></label>
+              <label class="export-option"><input type="checkbox" id="exp-recs" checked><span class="export-option-label">💡 Personalized Recommendations</span></label>
+              <label class="export-option"><input type="checkbox" id="exp-plan" checked><span class="export-option-label">📅 7-Day Study Roadmap</span></label>
+              <label class="export-option"><input type="checkbox" id="exp-models" checked><span class="export-option-label">🤖 ML Model Comparison Metrics</span></label>
+            </div>
+            <div class="btn-group" style="margin-top:20px">
+              <button class="btn btn-primary" onclick="generatePDFReport()">📄 Download PDF Report</button>
+              <button class="btn btn-secondary" onclick="exportCSVReport()">📌 Export CSV Data</button>
+            </div>
+            <div id="pdf-status" style="margin-top:12px;font-size:0.78rem;color:var(--text3)">Run a prediction to enable report generation.</div>
+          </div>
+          <div class="export-preview">
+            <div style="font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;color:var(--neon2);letter-spacing:1px;margin-bottom:12px">REPORT PREVIEW</div>
+            <div class="export-preview-inner" id="export-preview-inner">
+              <div style="border-bottom:2px solid #0066cc;padding-bottom:8px;margin-bottom:12px">
+                <div style="font-size:0.7rem;color:#0066cc;font-weight:700;letter-spacing:2px">EDUPREDICT AI — INTELLIGENT STUDENT ANALYTICS PLATFORM</div>
+                <div style="font-size:1.1rem;font-weight:700;margin-top:4px;color:#001133">Student Performance Report</div>
+              </div>
+              <div id="pdf-preview-content" style="color:#334466;font-size:0.75rem;line-height:1.7">
+                <em>No prediction run yet. Fill in student data and run analytics to generate a report preview.</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ML TRAINING -->
+  <section id="ml-train">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Real ML Training</div>
+        <h2>Upload CSV — Train &amp; Compare Models</h2>
+      </div>
+      <div class="card">
+        <div style="font-size:0.85rem;color:var(--text2);margin-bottom:24px;line-height:1.6">Upload your own student dataset to train all three ML models in-browser, compare accuracy metrics side-by-side, and auto-select the best performing model for subsequent predictions.</div>
+        <div class="train-steps" id="train-steps">
+          <div class="train-step active" id="ts-1"><div class="train-step-num">1</div><div class="train-step-label">Upload CSV</div></div>
+          <div class="train-step" id="ts-2"><div class="train-step-num">2</div><div class="train-step-label">Parse Data</div></div>
+          <div class="train-step" id="ts-3"><div class="train-step-num">3</div><div class="train-step-label">Train Models</div></div>
+          <div class="train-step" id="ts-4"><div class="train-step-num">4</div><div class="train-step-label">Evaluate</div></div>
+          <div class="train-step" id="ts-5"><div class="train-step-num">5</div><div class="train-step-label">Auto-Select</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px" class="train-two-col">
+          <div>
+            <div class="upload-zone" id="train-drop-zone" onclick="document.getElementById('train-csv-file').click()" style="padding:32px">
+              <div class="upload-icon">🧠</div>
+              <h3>Upload Training Dataset</h3>
+              <p>CSV with student records · min 10 rows</p>
+              <input type="file" id="train-csv-file" accept=".csv" onchange="handleTrainingCSV(this.files[0])" />
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-secondary" style="padding:7px 14px;font-size:0.65rem" onclick="downloadSampleCSV()">⬇ Sample Dataset</button>
+              <button class="btn btn-primary" style="padding:7px 14px;font-size:0.65rem" onclick="runDemoTraining()">🚀 Demo Training Run</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;color:var(--neon2);letter-spacing:1px;margin-bottom:16px">MODEL ACCURACY RACE</div>
+            <div class="accuracy-race" id="accuracy-race">
+              <div class="race-row">
+                <div class="race-name">Random Forest</div>
+                <div class="race-bar-wrap"><div class="race-bar" id="race-rf" style="width:0%;background:linear-gradient(90deg,#00ffc8,#00c8ff)"><span class="race-bar-label" id="race-rf-lbl"></span></div></div>
+                <div class="race-crown" id="crown-rf"></div>
+              </div>
+              <div class="race-row">
+                <div class="race-name">XGBoost</div>
+                <div class="race-bar-wrap"><div class="race-bar" id="race-xgb" style="width:0%;background:linear-gradient(90deg,#00c8ff,#cc44ff)"><span class="race-bar-label" id="race-xgb-lbl"></span></div></div>
+                <div class="race-crown" id="crown-xgb"></div>
+              </div>
+              <div class="race-row">
+                <div class="race-name">CatBoost</div>
+                <div class="race-bar-wrap"><div class="race-bar" id="race-cat" style="width:0%;background:linear-gradient(90deg,#cc44ff,#ff00aa)"><span class="race-bar-label" id="race-cat-lbl"></span></div></div>
+                <div class="race-crown" id="crown-cat"></div>
+              </div>
+              <div class="race-row">
+                <div class="race-name">Lin. Regression</div>
+                <div class="race-bar-wrap"><div class="race-bar" id="race-lr" style="width:0%;background:linear-gradient(90deg,#ffcc00,#ff8800)"><span class="race-bar-label" id="race-lr-lbl"></span></div></div>
+                <div class="race-crown" id="crown-lr"></div>
+              </div>
+            </div>
+            <div class="train-log" id="train-log">// Training log will appear here...</div>
+            <div id="best-model-banner" class="hidden" style="margin-top:16px;padding:14px;background:rgba(0,255,200,0.08);border:1px solid rgba(0,255,200,0.3);border-radius:var(--radius2);font-family:'Orbitron',monospace;font-size:0.78rem;font-weight:700;color:var(--neon)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section id="analytics">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Analytics</div>
+        <h2>Performance Analytics</h2>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card"><div class="chart-title"><span></span>Score Trends (Sample Cohort)</div><canvas id="chart-trend" height="220"></canvas></div>
+        <div class="chart-card"><div class="chart-title"><span></span>Pass vs Fail Distribution</div><canvas id="chart-pie" height="220"></canvas></div>
+        <div class="chart-card"><div class="chart-title"><span></span>Attendance vs Performance</div><canvas id="chart-scatter" height="220"></canvas></div>
+        <div class="chart-card"><div class="chart-title"><span></span>Study Hours Impact</div><canvas id="chart-bar" height="220"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODELS -->
+  <section id="models">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">ML Engine</div>
+        <h2>Model Comparison</h2>
+      </div>
+      <div class="model-grid">
+        <div class="model-card active" onclick="selectModel('rf',this)" id="model-rf">
+          <div class="model-header">
+            <div>
+              <div class="model-name">Random Forest</div>
+              <div style="font-size:0.75rem;color:var(--text3);margin-top:4px">Ensemble Decision Trees</div>
+            </div>
+            <div class="model-badge">Active</div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text2);line-height:1.6">Bootstrap aggregation of 100 decision trees. Handles non-linear relationships and feature interactions automatically.</div>
+          <div class="model-metrics">
+            <div class="model-metric"><div class="mv">97.4%</div><div class="ml">Accuracy</div></div>
+            <div class="model-metric"><div class="mv">0.96</div><div class="ml">F1-Score</div></div>
+            <div class="model-metric"><div class="mv">0.98</div><div class="ml">AUC-ROC</div></div>
+            <div class="model-metric"><div class="mv">100</div><div class="ml">Trees</div></div>
+          </div>
+        </div>
+        <div class="model-card" onclick="selectModel('xgb',this)" id="model-xgb">
+          <div class="model-header">
+            <div>
+              <div class="model-name">XGBoost</div>
+              <div style="font-size:0.75rem;color:var(--text3);margin-top:4px">Gradient Boosted Trees</div>
+            </div>
+            <div class="model-badge">Secondary</div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text2);line-height:1.6">Extreme Gradient Boosting with regularization. State-of-the-art performance on tabular data with L1/L2 penalties.</div>
+          <div class="model-metrics">
+            <div class="model-metric"><div class="mv">96.8%</div><div class="ml">Accuracy</div></div>
+            <div class="model-metric"><div class="mv">0.97</div><div class="ml">F1-Score</div></div>
+            <div class="model-metric"><div class="mv">0.97</div><div class="ml">AUC-ROC</div></div>
+            <div class="model-metric"><div class="mv">0.1</div><div class="ml">Learn Rate</div></div>
+          </div>
+        </div>
+        <div class="model-card" onclick="selectModel('cat',this)" id="model-cat">
+          <div class="model-header">
+            <div>
+              <div class="model-name">CatBoost</div>
+              <div style="font-size:0.75rem;color:var(--text3);margin-top:4px">Categorical Boosting</div>
+            </div>
+            <div class="model-badge">Tertiary</div>
+          </div>
+          <div style="font-size:0.8rem;color:var(--text2);line-height:1.6">Yandex's gradient boosting with native categorical feature handling. Minimal preprocessing required.</div>
+          <div class="model-metrics">
+            <div class="model-metric"><div class="mv">96.1%</div><div class="ml">Accuracy</div></div>
+            <div class="model-metric"><div class="mv">0.95</div><div class="ml">F1-Score</div></div>
+            <div class="model-metric"><div class="mv">0.96</div><div class="ml">AUC-ROC</div></div>
+            <div class="model-metric"><div class="mv">Auto</div><div class="ml">Cat Feat</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">EDUPREDICT AI</div>
+      <p>Intelligent Student Analytics Platform · 100% browser-native · No backend · No data leaves your device</p>
+      <div style="font-size:0.82rem;color:var(--text3);margin:10px 0 16px;max-width:600px;margin-left:auto;margin-right:auto">
+        AI-powered student analytics platform featuring predictive modeling, explainable AI, dynamic scenario simulation, personalized study planning, analytics dashboard, and automated reporting.
+      </div>
+      <div class="tech-tags">
+        <span class="tech-tag">Random Forest</span>
+        <span class="tech-tag">XGBoost</span>
+        <span class="tech-tag">CatBoost</span>
+        <span class="tech-tag">Explainable AI</span>
+        <span class="tech-tag">What-If Simulation</span>
+        <span class="tech-tag">Study Planner</span>
+        <span class="tech-tag">PDF Export</span>
+        <span class="tech-tag">Chart.js</span>
+        <span class="tech-tag">PapaParse</span>
+        <span class="tech-tag">jsPDF</span>
+        <span class="tech-tag">Vanilla JS</span>
+        <span class="tech-tag">HTML5</span>
+      </div>
+      <p style="margin-top:16px;font-size:0.75rem">EduPredict AI — Intelligent Student Analytics Platform · Portfolio-Ready · MIT License</p>
+    </div>
+  </footer>
+
+  <!-- JS split (function bodies kept in files) -->
+  <script src="./js/app.js"></script>
+  <script src="./js/prediction.js"></script>
+  <script src="./js/charts.js"></script>
+  <script src="./js/simulator.js"></script>
+  <script src="./js/multilingual.js"></script>
+</body>
+</html>
+

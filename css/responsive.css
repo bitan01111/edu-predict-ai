@@ -1,0 +1,44 @@
+/* Responsive tweaks extracted from index.html */
+@media (max-width: 768px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+  .nav-links {
+    display: none;
+  }
+  .hero-stats {
+    gap: 24px;
+  }
+  .hero-stat .num {
+    font-size: 1.5rem;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .model-grid {
+    grid-template-columns: 1fr;
+  }
+  .pred-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .xai-two-col,
+  .train-two-col {
+    grid-template-columns: 1fr !important;
+  }
+  .sim-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .pred-grid {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    padding: 0 16px;
+  }
+}
+

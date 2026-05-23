@@ -1,0 +1,35 @@
+/* Theme overrides + light mode adjustments */
+[data-theme='light'] {
+  --bg: #f0f4ff;
+  --bg2: #e8eeff;
+  --bg3: #dce6ff;
+  --card: rgba(255, 255, 255, 0.9);
+  --card2: rgba(240, 244, 255, 0.95);
+  --border: rgba(0, 100, 200, 0.2);
+  --border2: rgba(0, 80, 200, 0.3);
+  --neon: #0066cc;
+  --neon2: #0044aa;
+  --neon3: #cc0077;
+  --text: #001133;
+  --text2: #334466;
+  --text3: #6677aa;
+  --glow: 0 0 20px rgba(0, 100, 200, 0.2);
+  --glow2: 0 0 30px rgba(0, 80, 200, 0.15);
+}
+
+[data-theme='light'] nav {
+  background: rgba(240, 244, 255, 0.9);
+}
+
+[data-theme='light'] .grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 100, 200, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 100, 200, 0.04) 1px, transparent 1px);
+}
+
+[data-theme='light'] .form-group input,
+[data-theme='light'] .form-group select {
+  background: rgba(255, 255, 255, 0.8);
+  color: #001133;
+}
+

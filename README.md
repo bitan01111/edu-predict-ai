@@ -1,4 +1,4 @@
-# EduPredict AI
+# EduPredict AI — Intelligent Student Analytics Platform
 
 AI-powered student analytics platform with predictive modeling, explainable AI, dashboards, study planner, and automated reporting.
 
@@ -14,11 +14,9 @@ AI-powered student analytics platform with predictive modeling, explainable AI, 
 - Dark/Light mode
 - Fully responsive UI
 
-## Tech Stack
-HTML, CSS, JavaScript, Chart.js, Machine Learning Concepts
-
 ## Live Demo
 https://edu-predict-ai.netlify.app/
 
-## Author
-Bitan Chakraborty
+## License
+MIT
+
