@@ -18,7 +18,7 @@ AI-powered student analytics platform with predictive modeling, explainable AI, 
 HTML, CSS, JavaScript, Chart.js, Machine Learning Concepts
 
 ## Live Demo
-(Add deployment link here)
+https://edu-predict-ai.netlify.app/
 
 ## Author
 Bitan Chakraborty
