@@ -1,0 +1,20 @@
+{
+  "name": "edu-predict-ai",
+  "version": "1.0.0",
+  "description": "AI-powered student analytics platform featuring predictive modeling, explainable AI, dynamic scenario simulation, personalized study planning, analytics dashboard, and automated reporting.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "author": "bitan01111",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitan01111/edu-predict-ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bitan01111/edu-predict-ai/issues"
+  },
+  "homepage": "https://github.com/bitan01111/edu-predict-ai#readme"
+}
